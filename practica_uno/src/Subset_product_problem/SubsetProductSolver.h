@@ -1,22 +1,34 @@
+/**
+ * @file SubsetProductSolver.h
+ * @brief Definition of the SubsetProductSolver class
+ * 
+ * This file contains the definition of the SubsetProductSolver class
+ * 
+ * @see SubsetProductSolver.cpp
+ * @author Erick Jesus Rios Gonzalez
+ * @date 2025-09-19
+ */
+
 #ifndef SUBSET_PRODUCT_SOLVER_H
 #define SUBSET_PRODUCT_SOLVER_H
 
 #include "SubsetGenerator.h"
 #include "SubsetVerifier.h"
 
-// Clase que coordina la generación de subconjuntos y la verificación
+/**
+ * @brief SubsetProductSolver class
+ */
 class SubsetProductSolver {
 public:
-    // Constructor que recibe el conjunto A y el valor máximo t
+    
     SubsetProductSolver(const std::vector<int>& A, int t);
 
-    // Método que ejecuta la generación y verificación
     void solve();
 
 private:
-    SubsetGenerator generator; // Objeto para generar subconjuntos
-    SubsetVerifier verifier;   // Objeto para verificar los subconjuntos
-    int t;                     // Valor máximo permitido para el producto
+    SubsetGenerator generator; 
+    SubsetVerifier verifier;   
+    int t;                    
 };
 
 #endif // SUBSET_PRODUCT_SOLVER_H
