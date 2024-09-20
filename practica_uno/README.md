@@ -1,5 +1,5 @@
 # Subset Product and Knapsack Problem Solver
-
+## Erick Jesús Ríos González
 ## Introduction
 
 This project implements two NP-complete problems in C++ using object-oriented programming:
