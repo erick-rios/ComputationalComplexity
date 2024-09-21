@@ -14,7 +14,7 @@ The project is organized into modules that define items, solve the problem using
 │   └── knapsack                 # Compiled executable
 ├── include                      # Header files
 │   ├── Item.hpp                 # Defines the Item class
-│   ├── KnapsackSolver.hpp        # Contains the KnapsackSolver class definition
+│   ├── KnapsackSolver.hpp       # Contains the KnapsackSolver class definition
 │   ├── SubsetGenerator.hpp      # Handles generation of subsets of items
 │   └── SubsetVerifier.hpp       # Verifies subsets based on constraints
 ├── README.md                    # This file
