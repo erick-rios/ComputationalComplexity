@@ -38,9 +38,9 @@ To compile the project, use a C++ compiler (e.g., g++ or clang) and the followin
 1. Navigate to the root directory.
 2. Run the following command to compile the project:
 
-   ```bash
-   g++ -I include -o bin/knapsack src/*.cpp
-   ```
+```bash
+g++ -I include -o bin/knapsack src/*.cpp
+```
 
 3. The compiled executable will be available in the `bin` directory.
 

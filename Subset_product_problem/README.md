@@ -35,9 +35,9 @@ To compile the project, use a C++ compiler and run the following commands:
 1. Navigate to the root directory of the project.
 2. Run the following command to compile the project:
 
-   ```bash
-   g++ -I include -o bin/subset_solver src/*.cpp
-   ```
+```bash
+g++ -I include -o bin/subset_solver src/*.cpp
+```
 
 3. The compiled executable will be placed in the `bin` directory.
 
