@@ -1,36 +1,83 @@
-# Subset Product and Knapsack Problem Solver
-## Erick Jesús Ríos González
-## Introduction
 
-This project implements two NP-complete problems in C++ using object-oriented programming:
-- **Subset Product Problem**: Given a set of integers `A`, determine a subset whose product is maximal but does not exceed a given value `t`.
-- **Knapsack Problem**: Given a knapsack of capacity `C` and a set of items, each with a weight and value, determine the subset of items that maximizes the value without exceeding the knapsack's capacity.
+# Computational Complexity Project Repository
 
-## Features
+## Owner: Erick Jesús  Ríos González
 
-- **Subset Product Problem**: The algorithm generates a random subset from the given set `A` and verifies if its product is less than or equal to `t`.
-- **Knapsack Problem**: A random subset of items is generated, and the total weight and value are calculated to determine if the subset can fit in the knapsack without exceeding its capacity.
+## Overview
+This repository contains the work I have done for my **Computational Complexity** class. It includes implementations of various algorithms and problems, specifically focusing on the **Knapsack Problem** and the **Subset Product Problem**. Each problem is organized into its own directory with separate source code, headers, executables, and documentation. Additionally, the repository contains reports for each project.
 
+## Repository Structure
 
+```
+.
+├── Knapsack_problem              # Contains code and executable for solving the Knapsack Problem
+│   ├── bin
+│   │   └── knapsack              # Compiled executable for Knapsack Problem
+│   ├── include                   # Header files for Knapsack Problem
+│   │   ├── Item.hpp
+│   │   ├── KnapsackSolver.hpp
+│   │   ├── SubsetGenerator.hpp
+│   │   └── SubsetVerifier.hpp
+│   ├── README.md                 # Documentation for Knapsack Problem
+│   └── src                       # Source files for Knapsack Problem
+│       ├── Item.cpp
+│       ├── KnapsackSolver.cpp
+│       ├── main.cpp
+│       ├── SubsetGenerator.cpp
+│       └── SubsetVerifier.cpp
+├── README.md                     # Main README for the repository
+├── reports                       # Contains project reports written in LaTeX
+│   ├── build
+│   │   ├── practica_uno.pdf       # Compiled report in PDF format
+│   └── practica_uno.tex           # LaTeX source for the report
+└── Subset_product_problem        # Contains code and executable for solving the Subset Product Problem
+    ├── bin
+    │   └── subset_solver         # Compiled executable for Subset Product Problem
+    ├── include                   # Header files for Subset Product Problem
+    │   ├── SubsetGenerator.h
+    │   ├── SubsetProductSolver.h
+    │   └── SubsetVerifier.h
+    ├── README.md                 # Documentation for Subset Product Problem
+    └── src                       # Source files for Subset Product Problem
+        ├── main.cpp
+        ├── SubsetGenerator.cpp
+        ├── SubsetProductSolver.cpp
+        └── SubsetVerifier.cpp
+```
 
-## How to Build and Run
+## Knapsack Problem
+The **Knapsack Problem** is a combinatorial optimization problem where the objective is to maximize the value of items placed in a knapsack without exceeding its weight capacity. This directory contains the following files:
 
-### Prerequisites
+- **Header files**: Define the structure and methods for solving the knapsack problem.
+- **Source files**: Implement the logic to solve the problem using dynamic programming and other approaches.
+- **Executable**: A precompiled executable that solves the knapsack problem with input provided by the user.
 
-Make sure you have the following installed:
-- **C++ compiler** (e.g., `g++` or `clang`)
-- **Git**: To clone the repository from GitHub.
-
-### Download the Repository
-
-You can download the code by cloning the GitHub repository:
-
+### Build Instructions:
+To compile the knapsack solver:
 ```bash
-git clone https://github.com/erick-rios/ComputationalComplexity
-cd SubsetKnapsackSolver
+g++ -I include -o bin/knapsack src/*.cpp
+```
 
-```bash
-g++ -o knapsack main.cpp Item.cpp SubsetGenerator.cpp SubsetVerifier.cpp KnapsackSolver.cpp
+## Subset Product Problem
+The **Subset Product Problem** involves finding a subset of elements from a given set such that their product is maximized without exceeding a specific target. The structure of this directory is similar to the knapsack problem:
 
+- **Header files**: Contain the necessary function declarations for subset generation, product solving, and verification.
+- **Source files**: Provide the logic to solve the subset product problem.
+- **Executable**: A precompiled solver for the subset product problem.
+
+### Build Instructions:
+To compile the subset product solver:
 ```bash
-g++ -o subset_solver main.cpp SubsetGenerator.cpp SubsetVerifier.cpp SubsetProductSolver.cpp
+g++ -I include -o bin/subset_solver src/*.cpp
+```
+
+## Reports
+The `reports` directory contains LaTeX files and compiled PDFs of the reports for each project. These reports provide detailed explanations of the algorithms, complexity analysis, and results.
+
+To compile the LaTeX report (assuming LaTeX is installed):
+```bash
+pdflatex -output-directory=reports/build reports/practica_uno.tex
+```
+
+## License
+This project is licensed under the MIT License.
