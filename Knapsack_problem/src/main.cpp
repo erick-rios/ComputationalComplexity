@@ -1,52 +1,51 @@
 /**
  * @file main.cpp
- * @brief Main file for the knapsack problem
  * 
- * This file contains the main function to solve the knapsack problem
+ * @brief This file contains the main function.
  * 
- * @see KnapsackSolver.hpp
- * @see Item.hpp
+ * @details This function creates objects, assigns weights and profits to them, and solves the knapsack problem.
  * 
- * @author Erick Jesus Rios Gonzalez
- * @date 2025-09-19
+ * @version 1.00
+ * 
+ * @author Erick Jesús Ríos Gonzalez
+ * 
+ * @date 04/12/2024
  */
+#include "KnapsackProblem.hpp"
 #include <iostream>
-#include <vector>
-#include <cstdlib>  
-#include <ctime>    
-#include "Item.hpp"
-#include "KnapsackSolver.hpp"
+using namespace std;
 
 /**
- * @brief Main function
+ * @brief The main function.
  * 
- * @return int 0 if success
+ * @return 0 if the program executed successfully.
+ * 
+ * @details This function creates objects, assigns weights and profits to them, and solves the knapsack problem.
  */
 int main() {
-    // Initialize random seed
-    std::srand(std::time(0));
+    srand(time(nullptr));
+    KnapsackProblem knapsackProblem;
+    ObjectManager objectManager;
 
-    // Define at least 10 items with random weights and values
-    std::vector<Item> items;
-    int num_items = 10;  // Minimum number of items
-
-    for (int i = 0; i < num_items; ++i) {
-        int random_weight = std::rand() % 101;  // Generate random weight (0-100)
-        int random_value = std::rand() % 101;   // Generate random value (0-100)
-        items.push_back(Item(random_weight, random_value));
+    // Create objects
+    vector<string> objects = knapsackProblem.createObjects();
+    cout << "Created objects: ";
+    for (const string& obj : objects) {
+        cout << obj << " ";
     }
+    cout << endl;
 
-    // Print items' weights and values
-    std::cout << "Randomly generated items for knapsack problem:\n";
-    for (const auto& item : items) {
-        std::cout << "Item - Weight: " << item.weight << ", Value: " << item.value << std::endl;
-    }
+    // Assign weights and profits
+    unordered_map<string, int> weights = objectManager.assignWeights(objects);
+    unordered_map<string, int> profits = objectManager.assignProfits(objects);
 
-    int knapsack_capacity = 200;  // Maximum knapsack capacity
+    // Get user inputs for capacity and k
+    int capacity = knapsackProblem.getCapacityInput();
+    int k = knapsackProblem.getKInput(weights);
 
-    // Create a KnapsackSolver object and solve the problem
-    KnapsackSolver solver(knapsack_capacity, items);
-    solver.solve(1000);  // Test with 1000 iterations
+    // Check the knapsack solution
+    string result = knapsackProblem.checkKnapsack(capacity, objects, weights, profits, k);
+    cout << result << endl;
 
     return 0;
 }

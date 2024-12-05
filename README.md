@@ -10,7 +10,7 @@ This repository contains the work I have done for my **Computational Complexity*
 
 ```
 .
-├── Knapsack_problem              # Contains code and executable for solving the Knapsack Problem
+├── Knapsack_problem              # Contains code and executable for solving the Knapsack Problem Decision Problem
 │   ├── bin
 │   │   └── knapsack              # Compiled executable for Knapsack Problem
 │   ├── include                   # Header files for Knapsack Problem
@@ -30,7 +30,7 @@ This repository contains the work I have done for my **Computational Complexity*
 │   ├── build
 │   │   ├── practica_uno.pdf       # Compiled report in PDF format
 │   └── practica_uno.tex           # LaTeX source for the report
-└── Subset_product_problem        # Contains code and executable for solving the Subset Product Problem
+└── Subset_product_problem        # Contains code and executable for solving the Subset Product Decision Problem
     ├── bin
     │   └── subset_solver         # Compiled executable for Subset Product Problem
     ├── include                   # Header files for Subset Product Problem
@@ -55,9 +55,14 @@ The **Knapsack Problem** is a combinatorial optimization problem where the objec
 ### Build Instructions:
 To compile the knapsack solver:
 ```bash
-g++ -I include -o bin/knapsack src/*.cpp
+cd Knapsack_problem
 ```
-
+```bash
+make
+```
+```bash
+./bin/knapsack
+```
 ## Subset Product Problem
 The **Subset Product Problem** involves finding a subset of elements from a given set such that their product is maximized without exceeding a specific target. The structure of this directory is similar to the knapsack problem:
 
@@ -68,9 +73,14 @@ The **Subset Product Problem** involves finding a subset of elements from a give
 ### Build Instructions:
 To compile the subset product solver:
 ```bash
-g++ -I include -o bin/subset_solver src/*.cpp
+cd Knapsack_problem
 ```
-
+```bash
+make
+```
+```bash
+./bin/subset_solver
+```
 ## Reports
 The `reports` directory contains LaTeX files and compiled PDFs of the reports for each project. These reports provide detailed explanations of the algorithms, complexity analysis, and results.
 
