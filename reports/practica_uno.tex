@@ -1,217 +1,248 @@
-\documentclass{article}
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
 \usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{algorithm}
-\usepackage{algpseudocode}
-\usepackage{graphicx}  % Para manejar las imágenes
-\usepackage{subcaption}  % Para manejar subfiguras
-\usepackage{float}  % Opcional para controlar la posición de las figuras
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{subcaption}
 
-
-\title{Pr\'actica 1: Complejidad Computacional}
+\title{Programa 1}
 \author{Erick Jes\'us R\'ios Gonz\'alez}
-\date{\today}
+\date{04/diciembre/2024}
 
 \begin{document}
 
 \maketitle
-\section{Problema del Producto de Subconjuntos}
-\subsection{Pseodocódigo}
-\begin{algorithm}
-\caption{SubsetProductProblem}
-\begin{algorithmic}[1]
-\Function{generate\_subset}{A: List of Integers} $\to$ List of Integers
-    \State Initialize empty list $subset$
-    \For{each element $elem$ in $A$}
-        \State Generate randomly 0 or 1
-        \If{random value is 1}
-            \State Add $elem$ to $subset$
-        \EndIf
-    \EndFor
-    \State \Return $subset$
-\EndFunction
-\\
-\Function{verify\_subset}{subset: List of Integers, t: Integer} $\to$ Boolean
-    \State Initialize $product = 1$
-    \For{each element $elem$ in $subset$}
-        \State $product \gets product \times elem$
-        \If{$product > t$}
-            \State \Return No
-        \EndIf
-    \EndFor
-    \State \Return Yes
-\EndFunction
-\\
-\Function{subset\_product\_decision}{A: List of Integers, t: Integer} $\to$ (Boolean, List of Integers)
-    \State $subset \gets$ \Call{generate\_subset}{$A$}
-    \State $is\_valid \gets$ \Call{verify\_subset}{$subset, t$}
-    \State \Return $(is\_valid, subset)$
-\EndFunction
-\end{algorithmic}
-\end{algorithm}
-\subsection{Correctitud}
 
-La función \texttt{generate\_subset} recorre todos los elementos del conjunto $A$ y, para cada elemento, decide aleatoriamente (con probabilidad 50\%) si incluirlo en el subconjunto. Como cada elemento es independiente y el proceso es no determinista, cualquier subconjunto posible de $A$ puede ser generado.
-Esto garantiza que el subconjunto generado es un subconjunto válido de $A$, ya que solo puede contener elementos de $A$ y no repite elementos.
-La función \texttt{verify\_subset} recibe un subconjunto y calcula el producto de sus elementos. A medida que se va calculando el producto, se verifica si este excede el valor $t$. Si en algún momento el producto excede $t$, se retorna "No" (False). Si el producto es menor o igual a $t$ para todos los elementos, se retorna "Sí" (True).
-Esto garantiza que la verificación se realiza correctamente, ya que la multiplicación de elementos y la comparación con $t$ se hace en cada paso, deteniéndose en el momento en que el producto excede $t$.
-\subsection{Análisis de Complejidad}
+\section{Problema de la mochila}
 
-La complejidad del algoritmo es polinomial porque la función generar el subconjunto 
-de forma aleatoria es una primitiva, es $O(n)$. Pues no estamos generando
-todos los subconjuntos posibles, sino que estamos generando un subconjunto arbitrario.
-La función de verificar el producto de los elementos del subconjunto es $O(n)$ también, puesto que
-recorremos el subconjunto y multiplicamos los elementos, si el producto excede el valor $t$, 
-entonces retornamos No, en caso contrario, retornamos Sí. 
-Finalmente la implementación es correcta porque el algoritmo genera un subconjunto de forma aleatoria
-y verifica si el producto de los elementos del subconjunto es menor o igual a $t$ en tiempo polinomial.
-\subsection{Ejecución del Algoritmo}
-\begin{figure}[H]  % 'H' asegura que la figura esté justo aquí (si usas float)
-    \centering
-    \begin{subfigure}{0.7\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{../images/Screenshot from 2024-09-19 23-21-09.png}
-        \caption{Subfigura 1}
-        \label{fig:subfig1}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.7\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{../images/Screenshot from 2024-09-19 23-21-12.png}
-        \caption{Subfigura 2}
-        \label{fig:subfig2}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.7\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{../images/Screenshot from 2024-09-19 23-21-17.png}
-        \caption{Subfigura 3}
-        \label{fig:subfig3}
-    \end{subfigure}
+\subsection{Pseudocódigo del algoritmo}
 
-    \vspace{10pt}  % Espacio vertical entre las filas de subfiguras
-
-    \begin{subfigure}{0.7\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{../images/Screenshot from 2024-09-19 23-21-22.png}
-        \caption{Subfigura 4}
-        \label{fig:subfig4}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.7\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{../images/Screenshot from 2024-09-19 23-21-26.png}
-        \caption{Subfigura 5}
-        \label{fig:subfig5}
-    \end{subfigure}
-
-    \caption{Cinco ejecuciones del algoritmo desde terminal}
-    \label{fig:all_subfigures}
-\end{figure}
-
-
-\section{Problema de la Mochila}
-\section{Pseodocódigo}
-\begin{algorithm}
-    \caption{Knapsack Problem Solver}
+\begin{algorithm}[H]
+    \caption{\texttt{checkKnapsack} Function}
     \begin{algorithmic}[1]
+    \STATE \textbf{Function} \texttt{checkKnapsack}(C, O, w, v, k):
+    \STATE \# Non-deterministic phase
+    \STATE $s \gets []$ \{Initialize empty set\}
+    \FOR{$i \in O$}
+        \STATE result $\gets$ flip a coin
+        \IF{result = heads}
+            \STATE $s \gets s \cup \{i\}$ \{Add $i$ to set $s$\}
+        \ENDIF
+    \ENDFOR
+    \STATE \# Verification phase
+    \STATE $totalWeight \gets 0$
+    \STATE $totalProfit \gets 0$
+    \FOR{$i \in s$}
+        \STATE $totalWeight \gets totalWeight + w(i)$
+    \ENDFOR
+    \IF{$totalWeight > C$}
+        \RETURN `NO'
+    \ENDIF
+    \FOR{$i \in s$}
+        \STATE $totalProfit \gets totalProfit + v(i)$
+    \ENDFOR
+    \IF{$totalProfit < k$}
+        \RETURN `NO'
+    \ENDIF
+    \RETURN `YES'
+    \end{algorithmic}
+    \end{algorithm}
     
-    \Function{generate\_subset}{Item: List of [item\_weight, value]} $\to$ List of Integers
-        \State Initialize empty list $subset$
-        \For{each element $elem$ in Item}
-            \State Generate randomly 0 or 1
-            \If{random value is 1}
-                \State Add $elem$ to $subset$
-            \EndIf
-        \EndFor
-        \State \Return $subset$
-    \EndFunction
 
-    \Function{verify\_subset}{subset: List of Integers, max\_capacity: Integer} $\to$ {Boolean, Integer}
-        \State Initialize $total\_value \gets 0$
-        \For{each element $elem$ in subset}
-            \State $total\_weight \gets total\_weight + elem.weight$
-            \State $total\_value \gets total\_value + elem.value$
-            \If{$total\_weight >= max\_capacity$}
-                \State \Return (Yes, $total\_value$)
-            \Else
-                \State \Return (No,0)
-            \EndIf-else
-        \EndFor
-    \EndFunction
+\subsection{Demostración de correctitud del algoritmo}
 
-    \Function {knapsack\_solver}{Item: List of [item\_weight, value], max\_capacity: Integer} $\to$ (Boolean, List of Integers)
-        \State $subset \gets$ \Call{generate\_subset}{Item}
-        \State $(is\_valid, total\_value) \gets$ \Call{verify\_subset}{subset, max\_capacity}
-        \State \Return $(is\_valid, total\_value)$
-    \EndFunction
+El algoritmo no determinista \texttt{checkKnapsack} es correcto para el Problema de la Mochila.
+
+
+Sea
+$C \in \mathbb{Z}^+$, la capacidad de la mochila.
+$O$, un conjunto de $n$ objetos.
+$w : O \to \mathbb{Z}^+$, dado por $w(o_i) = x$, $x \in \{1, \dots, 100\}$ para cualquier $o_i \in O$.
+$v : O \to \mathbb{Z}^+$, dado por $v(o_i) = y$, $y \in \{1, \dots, 100\}$ para cualquier $o_i \in O$.
+$k \in \mathbb{Z}^+$, $0 < k \leq \sum_{i=1}^n v(O)$.
+
+
+Primero, supongamos que en la fase adivinadora se construye un subconjunto $S \subseteq O$ tal que el costo $w$ de $S$ no sobrepasa la capacidad $C$ de la mochila y que la ganancia total $v$ de $S$ sea mayor o igual a $k$. Si esto sucede:
+En la fase verificadora no pasará al \texttt{if} de la línea 16 ya que no sobrepasa $C$.
+Al calcular la ganancia total, como será mayor o igual a $k$, no entrará en el \texttt{if} de la línea 22, por lo que llega hasta la línea 23 y regresa \texttt{YES}.
+
+
+Ahora, supongamos que en la fase adivinadora se construye un subconjunto $S \subseteq O$ tal que el costo $w$ de $S$ sobrepasa la capacidad $C$. Por la línea 16, se ejecutará el \texttt{if} y regresará \texttt{NO}.
+
+Finalmente, supongamos que en la fase adivinadora se construye un subconjunto $S \subseteq O$ tal que el costo $w$ de $S$ no sobrepasa la capacidad $C$, pero la ganancia total del subconjunto no es mayor o igual a $k$. En este caso:
+     Como no sobrepasa la capacidad $C$ de la mochila, no entra en el \texttt{if} de la línea 16.
+     Pasa a calcular su ganancia total. Como la ganancia total no es mayor o igual a $k$, entonces entra en el \texttt{if} de la línea 22 y regresa \texttt{NO}.
+
+
+Como podemos ver, el algoritmo siempre regresa \texttt{YES} cuando se cumple que el costo de $S$ no sobrepasa la capacidad $C$ de la mochila y la ganancia de $S$ es mayor o igual a $k$. En cualquier otro caso, regresa \texttt{NO}. Por lo tanto el algoritmo es correcto.
+
+\subsection{Análisis de tiempo de ejecución}
+
+En la fase no determinista, para crear el subconjunto $S \subseteq O$, tenemos que recorrer con un ciclo \texttt{for} todos los elementos de $O$ para determinar si los agregamos o no a $S$. Internamente en dicho ciclo se ejecuta nuestra función \texttt{nd-choice}, que consiste en lanzar una moneda. Esta operación toma tiempo $O(1)$. Como esta operación está dentro del \texttt{for} y se ejecuta $n$ veces (donde $n$ es el número de elementos en $O$), la fase no determinista toma tiempo $O(n)$.
+
+Una vez construido el subconjunto $S$, pasamos a la fase de verificación:
+En la línea 13, iteramos sobre los elementos de $S$, que tiene cardinalidad $m \leq n$. Dentro del \texttt{for}, se efectúa una operación que suma los pesos $w$ de los elementos de $S$, lo cual toma tiempo $O(1)$. Como se ejecuta $m$ veces, toma tiempo $O(m)$, que en el peor caso será $O(n)$ si $S$ contiene todos los elementos de $O$.
+El \texttt{if} de la línea 16 es una simple comparación que toma $O(1)$.
+El \texttt{for} de la línea 19 también toma $O(n)$ por la misma razón que el \texttt{for} de la línea 13.
+El \texttt{if} de la línea 22, al ser una comparación, toma tiempo $O(1)$.
+
+
+En total, toda la fase verificadora toma tiempo $O(n)$.
+
+Considerando que tanto la fase adivinadora como la fase verificadora toman tiempo $O(n)$, podemos concluir que este es un \textbf{algoritmo no determinista y polinomial}.
+
+
+\section{Problema del producto de subconjunto}
+
+\subsection{Pseudocódigo del algoritmo}
+
+\begin{algorithm}[H]
+    \caption{\texttt{checkSubsetProduct} Function}
+    \begin{algorithmic}[1]
+    \STATE \textbf{Function} \texttt{checkSubsetProduct}(A, t, s, k):
+    \STATE \# Guessing phase
+    \STATE $x \gets \{\}$ \{Initialize empty set\}
+    \FOR{each $i \in A$}
+        \STATE result $\gets$ flip a coin
+        \IF{result = heads}
+            \STATE $x \gets x \cup \{A[i]\}$ \{Add $A[i]$ to set $x$\}
+        \ENDIF
+    \ENDFOR
+    \STATE \# Verification phase
+    \STATE $product \gets 1$ \{Initialize product to 1\}
+    \FOR{each $i \in x$}
+        \STATE $product \gets product \times x[i]$
+    \ENDFOR
+    \IF{$product \leq t$ \textbf{and} $product \geq k$}
+        \RETURN \texttt{YES}
+    \ENDIF
+    \RETURN \texttt{NO}
     \end{algorithmic}
 \end{algorithm}
-\subsection{Correctitud}
-La función \texttt{generate\_subset} recorre todos los elementos del conjunto $Item$ y, para cada elemento, decide aleatoriamente (con probabilidad 50\%) 
-si incluirlo en el subconjunto. Como cada elemento es independiente y el proceso es no determinista, cualquier subconjunto posible de $Item$ puede ser generado.
-Esto garantiza que el subconjunto generado es un subconjunto válido de $Item$, ya que solo puede contener elementos de $Item$ y no repite elementos.
-La función \texttt{verify\_subset} recibe un subconjunto y calcula el peso total de sus elementos, así como la ganancia total. A medida que se va calculando el peso
-total, se verifica si este excede el valor $max\_capacity$. Si en algún momento el producto excede $max\_capacity$, se retorna "No" (False). Si el producto es menor o igual a $\max_capacity$ para todos los elementos, se retorna "Sí" (True).
-Esto garantiza que la verificación se realiza correctamente, ya que la suma de los pesos y la comparación con $max\_capacity$ se hace en cada paso, deteniéndose en el momento en que el $total\_weight$ excede $max\_capacity$.
+    
 
-\textbf{Nota}: Para la implementación el programa nos pide encontrar el subconjunto que maximiza la ganancia, por lo que creo un ciclo for con un número de iteraciones definidas desde el inicio, en este caso 1000 iteraciones.
-Esto sigue siendo correcto, pues durante un numero finito de iteraciones, se generan subconjuntos aleatorios y se verifica si el peso total excede la capacidad máxima. De esta forma obtenemos un 
-maximo local que maximiza la ganancia.
-\subsection{Análisis de Complejidad}
-La complejidad del algoritmo es polinomial porque la función generar el subconjunto 
-de forma aleatoria es una primitiva, es $O(n)$. Pues no estamos generando
-todos los subconjuntos posibles, sino que estamos generando un subconjunto arbitrario.
-La función de verificar el producto de los elementos del subconjunto es $O(n)$ también, puesto que
-recorremos el subconjunto y sumamos los pesos de los elementos, si el peso total excede el valor $max\_capacity$, 
-entonces retornamos No, en caso contrario, retornamos Sí. 
-Finalmente la implementación es correcta porque el algoritmo genera un subconjunto de forma aleatoria
-y verifica si el producto de los elementos del subconjunto es menor o igual a $max\_capacity$ en tiempo polinomial.
+\section{Demostración y Análisis del Algoritmo}
 
-\textbf{Nota}: La implementación utilizando un número finito de iteraciones sigue siendo polinomial, pero el algoritmo no garantiza que el subconjunto generado sea el óptimo, sino que es un subconjunto que maximiza la ganancia en un número finito de iteraciones.
+El algoritmo no determinista \texttt{checkSubsetProduct} es correcto para el Problema del Producto de Subconjunto.
 
-\subsection{Ejecución del Algoritmo}
+Supongamos que en la fase verificadora se crea un subconjunto $x \subseteq A$ tal que el producto de todos sus elementos es mayor o igual a $k$.
 
-\begin{figure}[H]  % 'H' asegura que la figura esté justo aquí (si usas float)
+Pueden ocurrir dos casos:
+
+     \textbf{Primer caso}: El producto total de todos los elementos de $x$ es mayor que $t$. En este caso, no se cumplen las condiciones del \texttt{if} de la línea 15, por lo que se ejecuta la línea 18 y el algoritmo regresa \texttt{NO}.
+     
+     \textbf{Segundo caso}: El producto total de todos los elementos de $x$ es menor o igual a $t$. En este caso, se cumplen las condiciones del \texttt{if} de la línea 15, y el algoritmo regresa \texttt{YES} en la línea 16.
+
+
+Ahora, supongamos que en la fase verificadora se crea un subconjunto $x \subseteq A$ tal que el producto de todos sus elementos es menor que $k$. En este caso:
+
+     No importa si el producto es menor o igual a $t$, ya que no se cumple la condición de maximización.
+     No entra en el \texttt{if} de la línea 15, y por lo tanto el algoritmo regresa \texttt{NO} en la línea 18.
+
+
+Por lo tanto, podemos concluir que el algoritmo \texttt{checkSubsetProduct} regresa \texttt{YES} cuando el producto del subconjunto $x$ supera $k$ pero no sobrepasa $t$, y regresa \texttt{NO} cuando alguna de estas condiciones no se cumple.
+
+\subsection{Análisis de tiempo de ejecución}
+
+En la fase adivinadora, se recorre el conjunto $A$ con $n$ elementos mediante un ciclo \texttt{for}. Dentro del ciclo \texttt{for} se ejecuta la función \texttt{nd-choice}, que consiste en lanzar una moneda y, si cae cara, agregar el elemento iterado al subconjunto $x$. Esta operación toma tiempo $O(1)$. Dado que esta acción se repite $n$ veces, la complejidad de la fase adivinadora es $O(n)$.
+
+En la fase verificadora, se utiliza un ciclo \texttt{for} que itera sobre los elementos del subconjunto $x$ creado en la fase adivinadora, cuyo tamaño es $m \leq n$. Dentro del ciclo:
+
+     Se realizan dos comparaciones en un \texttt{if}, las cuales toman $O(1)$.
+     Esta acción se repite $m$ veces, resultando en una complejidad total de $O(m)$, que en el peor caso será $O(n)$ cuando $x$ contenga todos los elementos de $A$.
+
+
+En general, la complejidad de todo el algoritmo es $O(n)$.
+
+Dado que tanto la fase adivinadora (no determinista) como la fase verificadora tienen complejidad $O(n)$, podemos concluir que la función \texttt{checkSubsetProduct} es un \textbf{algoritmo no determinista y polinomial}.
+
+\section{Anexo}
+\begin{figure}[h!]
     \centering
-    \begin{subfigure}{0.7\textwidth}
+    % Primer fila
+    \begin{minipage}[b]{0.45\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{../images/Screenshot from 2024-09-19 23-04-13.png}
-        \caption{Subfigura 1}
-        \label{fig:subfig1}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.7\textwidth}
+        \includegraphics[width=\linewidth]{../images/knapasack_problem/Screenshot from 2024-12-04 22-47-48.png}
+        \caption{Imagen 1}
+    \end{minipage}
+    \hspace{0.5cm} % Espacio entre las imágenes
+    \begin{minipage}[b]{0.45\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{../images/Screenshot from 2024-09-19 23-03-51.png}
-        \caption{Subfigura 2}
-        \label{fig:subfig2}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.7\textwidth}
+        \includegraphics[width=\linewidth]{../images/knapasack_problem/Screenshot from 2024-12-04 22-48-15.png}
+        \caption{Imagen 2}
+    \end{minipage}
+    
+    \vspace{0.5cm} % Espacio entre las filas
+    
+    % Segunda fila
+    \begin{minipage}[b]{0.45\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{../images/Screenshot from 2024-09-19 23-03-59.png}
-        \caption{Subfigura 3}
-        \label{fig:subfig3}
-    \end{subfigure}
+        \includegraphics[width=\linewidth]{../images/knapasack_problem/Screenshot from 2024-12-04 22-48-29.png}
+        \caption{Imagen 3}
+    \end{minipage}
+    \hspace{0.5cm} % Espacio entre las imágenes
+    \begin{minipage}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/knapasack_problem/Screenshot from 2024-12-04 22-48-53.png}
+        \caption{Imagen 4}
+    \end{minipage}
 
-    \vspace{10pt}  % Espacio vertical entre las filas de subfiguras
-
-    \begin{subfigure}{0.7\textwidth}
+    \vspace{0.5cm} % Espacio entre las filas
+    
+    % Tercera fila (1 imagen centrada)
+    \begin{minipage}[b]{0.45\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{../images/Screenshot from 2024-09-19 23-04-05.png}
-        \caption{Subfigura 4}
-        \label{fig:subfig4}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.7\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{../images/Screenshot from 2024-09-19 23-04-09.png}
-        \caption{Subfigura 5}
-        \label{fig:subfig5}
-    \end{subfigure}
-
-    \caption{Cinco ejecuciones del algoritmo desde terminal}
-    \label{fig:all_subfigures}
+        \includegraphics[width=\linewidth]{../images/knapasack_problem/Screenshot from 2024-12-04 22-49-27.png}
+        \caption{Imagen 5}
+    \end{minipage}
+    
+    \caption{Captura de pantalla de 5 ejecuciones del problema de la mochila}
 \end{figure}
+
+\begin{figure}[h!]
+    \centering
+    % Primer fila
+    \begin{minipage}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/subset_product_problem/Screenshot from 2024-12-04 22-42-03.png}
+        \caption{Imagen 1}
+    \end{minipage}
+    \hspace{0.5cm} % Espacio entre las imágenes
+    \begin{minipage}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/subset_product_problem/Screenshot from 2024-12-04 22-42-34.png}
+        \caption{Imagen 2}
+    \end{minipage}
+    
+    \vspace{0.5cm} % Espacio entre las filas
+    
+    % Segunda fila
+    \begin{minipage}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/subset_product_problem/Screenshot from 2024-12-04 22-42-53.png}
+        \caption{Imagen 3}
+    \end{minipage}
+    \hspace{0.5cm} % Espacio entre las imágenes
+    \begin{minipage}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/subset_product_problem/Screenshot from 2024-12-04 22-43-09.png}
+        \caption{Imagen 4}
+    \end{minipage}
+
+    \vspace{0.5cm} % Espacio entre las filas
+    
+    % Tercera fila (1 imagen centrada)
+    \begin{minipage}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/subset_product_problem/Screenshot from 2024-12-04 22-43-27.png}
+        \caption{Imagen 5}
+    \end{minipage}
+    
+    \caption{Captura de pantalla de 5 ejecuciones del problema del producto de subconjunto}
+\end{figure}
+
 \end{document}
